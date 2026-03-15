@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import case_icon %}
+
+{% block title %}{{ case.title }} — Татьяна AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="page-hero-content animate-fade-up">
+            <a href="{{ url_for('cases') }}" class="back-link">← Все кейсы</a>
+            <span class="section-tag">Кейс #{{ case.id }}</span>
+            <h1 class="page-title">{{ case.title }}</h1>
+            <p class="page-subtitle">{{ case.short_desc }}</p>
+        </div>
+    </div>
+</section>
+
+<section class="case-detail section">
+    <div class="container">
+        <div class="case-detail-grid">
+            <div class="case-detail-main animate-on-scroll">
+                <div class="case-detail-image glass-card">
+                    <div class="case-image-placeholder large" style="--accent: {{ case.color }}">
+                        {{ case_icon(case.icon, 120) }}
+                    </div>
+                </div>
+
+                <div class="case-section glass-card">
+                    <h2><span class="gradient-text">Задача</span></h2>
+                    <p>{{ case.task }}</p>
+                </div>
+
+                <div class="case-section glass-card">
+                    <h2><span class="gradient-text">Решение</span></h2>
+                    <p>{{ case.solution }}</p>
+                </div>
+
+                <div class="case-section glass-card">
+                    <h2><span class="gradient-text">Результаты</span></h2>
+                    <ul class="results-list">
+                        {% for result in case.results %}
+                        <li>
+                            <span class="result-icon">✓</span>
+                            <span>{{ result }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="case-detail-sidebar animate-on-scroll">
+                <div class="sidebar-card glass-card">
+                    <h3>Технологии</h3>
+                    <div class="tech-tags">
+                        {% for tech in case.tech %}
+                        <span class="tech-tag">{{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="sidebar-card glass-card">
+                    <h3>Заказать похожий проект</h3>
+                    <p>Хотите реализовать аналогичное решение для вашего бизнеса?</p>
+                    <a href="{{ url_for('contact') }}" class="btn btn-primary btn-block">Обсудить проект</a>
+                </div>
+
+                <div class="sidebar-card glass-card">
+                    <h3>Другие кейсы</h3>
+                    <ul class="sidebar-cases">
+                        {% for other in cases if other and other.slug != case.slug %}
+                        <li><a href="{{ url_for('case_detail', slug=other.slug) }}">{{ other.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const allCases = {{ cases|default([])|tojson }};
+</script>
+{% endblock %}

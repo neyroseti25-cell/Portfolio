@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import case_icon %}
+
+{% block title %}Кейсы — Татьяна AI{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+    <div class="container">
+        <div class="page-hero-content animate-fade-up">
+            <span class="section-tag">Портфолио</span>
+            <h1 class="page-title">Мои <span class="gradient-text">проекты</span></h1>
+            <p class="page-subtitle">Реальные бизнес-кейсы с измеримыми результатами</p>
+        </div>
+    </div>
+</section>
+
+<section class="cases-list section">
+    <div class="container">
+        {% for case in cases %}
+        <div class="case-row glass-card animate-on-scroll {% if loop.index is odd %}case-row-normal{% else %}case-row-reverse{% endif %}">
+            <div class="case-row-image">
+                <div class="case-image-placeholder" style="--accent: {{ case.color }}">
+                    {{ case_icon(case.icon, 80) }}
+                </div>
+            </div>
+            <div class="case-row-content">
+                <span class="case-number">#{{ case.id }}</span>
+                <h2>{{ case.card_title }}</h2>
+                <p class="case-desc">{{ case.short_desc }}</p>
+                <div class="case-meta">
+                    <div class="case-meta-item">
+                        <strong>Задача:</strong>
+                        <span>{{ case.task[:120] }}...</span>
+                    </div>
+                </div>
+                <div class="case-tech-row">
+                    {% for tech in case.tech[:4] %}
+                    <span class="tech-tag">{{ tech }}</span>
+                    {% endfor %}
+                </div>
+                <a href="{{ url_for('case_detail', slug=case.slug) }}" class="btn btn-primary">Подробнее</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="cta-section section">
+    <div class="container">
+        <div class="cta-card glass-card animate-on-scroll">
+            <h2>Хотите такой же <span class="gradient-text">результат</span>?</h2>
+            <p>Расскажите о вашем проекте — найдем лучшее AI-решение вместе</p>
+            <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">Обсудить проект</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

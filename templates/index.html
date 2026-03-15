@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% from 'macros.html' import case_icon %}
+
+{% block title %}Татьяна — AI-специалист для роста бизнеса{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="container hero-container">
+        <div class="hero-text animate-fade-up">
+            <span class="hero-badge">AI-инженер &bull; Автоматизация &bull; Нейросети</span>
+            <h1 class="hero-title">
+                Татьяна: Ваш <span class="gradient-text">AI-специалист</span> для роста бизнеса
+            </h1>
+            <p class="hero-subtitle">
+                Помогаю предпринимателям и компаниям автоматизировать рутину, экономить время 
+                и увеличивать прибыль с помощью умных нейросетей. Без сложных терминов, с фокусом на результат.
+            </p>
+            <div class="hero-actions">
+                <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">Обсудить проект</a>
+                <a href="{{ url_for('cases') }}" class="btn btn-outline btn-lg">Смотреть кейсы</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-value">5+</span>
+                    <span class="stat-label">Завершенных проектов</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">400%</span>
+                    <span class="stat-label">Средний ROI</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value">24/7</span>
+                    <span class="stat-label">AI работает</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual animate-fade-up" style="animation-delay: 0.2s">
+            <div class="banner-frame">
+                <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Татьяна — AI-специалист" class="hero-banner">
+                <div class="banner-glow"></div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+    </div>
+</section>
+
+<!-- Value Proposition -->
+<section class="values section" id="values">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <span class="section-tag">Почему AI?</span>
+            <h2 class="section-title">Реальная <span class="gradient-text">польза</span> для вашего бизнеса</h2>
+            <p class="section-subtitle">Искусственный интеллект — это не просто тренд, это инструмент, который дает измеримые результаты</p>
+        </div>
+        <div class="values-grid">
+            <div class="value-card glass-card animate-on-scroll">
+                <div class="value-icon" style="--accent: #00F2FF">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+                </div>
+                <h3>Экономия времени</h3>
+                <p>До <strong>20 часов в неделю</strong> — AI берет на себя рутинные задачи, освобождая вас для стратегических решений</p>
+            </div>
+            <div class="value-card glass-card animate-on-scroll">
+                <div class="value-icon" style="--accent: #7000FF">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <h3>Сокращение расходов</h3>
+                <p>Автоматизация снижает затраты на персонал и операционные расходы до <strong>40%</strong></p>
+            </div>
+            <div class="value-card glass-card animate-on-scroll">
+                <div class="value-icon" style="--accent: #00F2FF">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
+                </div>
+                <h3>Увеличение прибыли</h3>
+                <p>AI-решения помогают находить новых клиентов и увеличивать средний чек до <strong>25%</strong></p>
+            </div>
+            <div class="value-card glass-card animate-on-scroll">
+                <div class="value-icon" style="--accent: #7000FF">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+                </div>
+                <h3>Конкурентное преимущество</h3>
+                <p>Бизнесы с AI опережают конкурентов, предлагая <strong>лучший сервис</strong> и скорость</p>
+            </div>
+            <div class="value-card glass-card animate-on-scroll">
+                <div class="value-icon" style="--accent: #00F2FF">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                </div>
+                <h3>Оптимизация процессов</h3>
+                <p>Умные алгоритмы находят узкие места и предлагают решения для <strong>максимальной эффективности</strong></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Cases Preview (Bento Grid) -->
+<section class="cases-preview section" id="cases">
+    <div class="container">
+        <div class="section-header animate-on-scroll">
+            <span class="section-tag">Портфолио</span>
+            <h2 class="section-title">Реализованные <span class="gradient-text">проекты</span></h2>
+            <p class="section-subtitle">Каждый кейс — это реальный бизнес-результат для клиента</p>
+        </div>
+        <div class="bento-grid">
+            {% for case in cases %}
+            <a href="{{ url_for('case_detail', slug=case.slug) }}" class="bento-card glass-card animate-on-scroll" style="--card-accent: {{ case.color }}">
+                <div class="bento-card-image">
+                    <div class="bento-placeholder" style="--accent: {{ case.color }}">
+                        {{ case_icon(case.icon, 48) }}
+                    </div>
+                </div>
+                <div class="bento-card-content">
+                    <span class="case-number">#{{ case.id }}</span>
+                    <h3>{{ case.card_title }}</h3>
+                    <p>{{ case.short_desc }}</p>
+                    <span class="bento-link">Подробнее →</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="section-footer animate-on-scroll">
+            <a href="{{ url_for('cases') }}" class="btn btn-outline">Все кейсы</a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section section">
+    <div class="container">
+        <div class="cta-card glass-card animate-on-scroll">
+            <h2>Готовы <span class="gradient-text">автоматизировать</span> ваш бизнес?</h2>
+            <p>Расскажите о вашей задаче — и я подберу оптимальное AI-решение</p>
+            <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">Обсудить проект</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

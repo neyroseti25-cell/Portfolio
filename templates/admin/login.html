@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход в админ-панель — Татьяна AI{% endblock %}
+
+{% block content %}
+<section class="admin-login-section">
+    <div class="container">
+        <div class="login-wrapper animate-fade-up">
+            <div class="login-card glass-card">
+                <div class="login-header">
+                    <span class="logo-icon" style="font-size: 2rem">⬡</span>
+                    <h1>Админ-панель</h1>
+                    <p>Введите данные для входа</p>
+                </div>
+                <form method="POST" action="{{ url_for('admin_login') }}" novalidate>
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="form-group">
+                        <label for="username">{{ form.username.label.text }}</label>
+                        {{ form.username(class="form-control", placeholder="Логин", id="username", autocomplete="username") }}
+                        {% for error in form.username.errors %}
+                        <span class="form-error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">{{ form.password.label.text }}</label>
+                        {{ form.password(class="form-control", placeholder="Пароль", id="password", autocomplete="current-password") }}
+                        {% for error in form.password.errors %}
+                        <span class="form-error">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        {{ form.submit.label.text }}
+                    </button>
+                </form>
+                <div class="login-footer">
+                    <a href="{{ url_for('index') }}">← Вернуться на сайт</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

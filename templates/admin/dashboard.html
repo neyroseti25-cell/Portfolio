@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Админ-панель — Татьяна AI{% endblock %}
+
+{% block content %}
+<section class="admin-section">
+    <div class="container">
+        <div class="admin-header animate-fade-up">
+            <div class="admin-title-row">
+                <h1>Админ-панель</h1>
+                <span class="admin-badge">{{ current_user.username }}</span>
+            </div>
+            <div class="admin-stats">
+                <div class="admin-stat glass-card">
+                    <span class="admin-stat-value">{{ messages.total }}</span>
+                    <span class="admin-stat-label">Всего заявок</span>
+                </div>
+                <div class="admin-stat glass-card">
+                    <span class="admin-stat-value accent">{{ unread_count }}</span>
+                    <span class="admin-stat-label">Непрочитанных</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-table-wrapper glass-card animate-on-scroll">
+            {% if messages.items %}
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Статус</th>
+                            <th>Имя</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Тема</th>
+                            <th>Сообщение</th>
+                            <th>Дата</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for msg in messages.items %}
+                        <tr class="{% if not msg.is_read %}unread{% endif %}">
+                            <td>{{ msg.id }}</td>
+                            <td>
+                                {% if msg.is_read %}
+                                <span class="status-badge read">Прочитано</span>
+                                {% else %}
+                                <span class="status-badge unread">Новое</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ msg.name }}</td>
+                            <td><a href="mailto:{{ msg.email }}">{{ msg.email }}</a></td>
+                            <td>{{ msg.phone or '—' }}</td>
+                            <td>{{ msg.subject }}</td>
+                            <td>
+                                <div class="msg-preview" title="{{ msg.message }}">{{ msg.message[:80] }}{% if msg.message|length > 80 %}...{% endif %}</div>
+                            </td>
+                            <td>{{ msg.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                            <td class="actions-cell">
+                                <form method="POST" action="{{ url_for('mark_read', msg_id=msg.id) }}" class="inline-form">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn-action btn-mark" title="{% if msg.is_read %}Отметить как непрочитанное{% else %}Отметить как прочитанное{% endif %}">
+                                        {% if msg.is_read %}
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                        {% else %}
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,6 9,17 4,12"/></svg>
+                                        {% endif %}
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ url_for('delete_message', msg_id=msg.id) }}" class="inline-form" onsubmit="return confirm('Удалить заявку #{{ msg.id }}?')">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button type="submit" class="btn-action btn-delete" title="Удалить">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if messages.pages > 1 %}
+            <div class="pagination">
+                {% if messages.has_prev %}
+                <a href="{{ url_for('admin_dashboard', page=messages.prev_num) }}" class="btn btn-outline btn-sm">← Назад</a>
+                {% endif %}
+                
+                <span class="page-info">Страница {{ messages.page }} из {{ messages.pages }}</span>
+                
+                {% if messages.has_next %}
+                <a href="{{ url_for('admin_dashboard', page=messages.next_num) }}" class="btn btn-outline btn-sm">Далее →</a>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="empty-state">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <h3>Заявок пока нет</h3>
+                <p>Новые обращения появятся здесь</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

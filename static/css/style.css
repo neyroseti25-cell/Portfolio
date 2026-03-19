@@ -526,7 +526,7 @@ body {
     grid-column: span 2;
 }
 
-.bento-card:nth-child(4) {
+.bento-card:nth-child(5) {
     grid-column: span 2;
 }
 
@@ -1466,7 +1466,7 @@ textarea.form-control {
     }
 
     .bento-card:nth-child(1),
-    .bento-card:nth-child(4) {
+    .bento-card:nth-child(5) {
         grid-column: span 1;
     }
 

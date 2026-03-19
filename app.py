@@ -1,9 +1,13 @@
+import os
 import logging
+from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, url_for, flash, request, abort
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from config import Config
 from models import db, Admin, ContactMessage
 from forms import LoginForm, ContactForm
+
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -163,7 +167,8 @@ def internal_error(e):
     return render_template('base.html', error=True, error_code=500, error_msg='Внутренняя ошибка сервера'), 500
 
 
+init_db()
+
 if __name__ == '__main__':
-    init_db()
-    logger.info('Application started')
+    logger.info('Application started (development)')
     app.run(debug=True, host='0.0.0.0', port=5001)

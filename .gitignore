@@ -8,4 +8,5 @@ app.log
 *.egg-info/
 dist/
 build/
+*.sock
 .DS_Store

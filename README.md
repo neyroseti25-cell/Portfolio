@@ -5,7 +5,7 @@
 ## Возможности
 
 - **Главная страница** — hero-блок, ценностные предложения, bento-grid кейсов
-- **Страница кейсов** — 5 подробных кейсов с детальными страницами
+- **Страница кейсов** — 6 подробных кейсов с детальными страницами
 - **Форма обратной связи** — валидация, CSRF-защита, сохранение в БД
 - **Админ-панель** — авторизация, просмотр/удаление заявок, отметка «прочитано»
 - **Дизайн** — темная тема «Cyber-Business Minimal», анимации, адаптивная верстка
@@ -82,6 +82,24 @@ Site/
 └── site.db                # SQLite база (создается автоматически)
 ```
 
+## Деплой на VPS
+
+В папке `deploy/` находятся готовые скрипты и конфиги:
+
+```bash
+# 1. На сервере от root — первоначальная настройка:
+bash deploy/setup-server.sh
+
+# 2. От пользователя tatiana — деплой приложения:
+bash deploy/deploy-app.sh
+
+# 3. SSL-сертификат:
+sudo certbot --nginx -d tatidzufri.com -d www.tatidzufri.com
+
+# 4. Обновление сайта после изменений:
+bash deploy/update.sh
+```
+
 ## Технологии
 
 - Python 3.10+
@@ -89,6 +107,8 @@ Site/
 - Flask-SQLAlchemy (SQLite)
 - Flask-Login
 - Flask-WTF (CSRF-защита)
+- Gunicorn (production)
+- Nginx (reverse proxy)
 - Jinja2 шаблоны
 - CSS3 (glassmorphism, анимации, адаптив)
 - Vanilla JavaScript (particles, scroll animations)

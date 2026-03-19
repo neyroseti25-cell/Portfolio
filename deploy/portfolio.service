@@ -1,0 +1,15 @@
+[Unit]
+Description=Portfolio Flask App (tatidzufri.com)
+After=network.target
+
+[Service]
+User=tatiana
+WorkingDirectory=/home/tatiana/site
+Environment="PATH=/home/tatiana/site/venv/bin"
+EnvironmentFile=/home/tatiana/site/.env
+ExecStart=/home/tatiana/site/venv/bin/gunicorn --workers 2 --bind unix:portfolio.sock -m 007 app:app
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

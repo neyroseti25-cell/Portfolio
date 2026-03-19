@@ -46,7 +46,7 @@ class Config:
             'tech': ['Python', 'LangChain', 'ChromaDB', 'RAGAS', 'OpenAI API', 'GigaChat API'],
             'color': '#7000FF',
             'icon': 'brain',
-            'demo_link': 'https://t.me/RAG_based_assist_bot',
+            'demo_link': 'https://telegram.me/RAG_based_assist_bot',
             'demo_text': 'Попробуйте пообщаться с ботом в Telegram — задайте любой вопрос о ретрите и оцените качество ответов!'
         },
         {

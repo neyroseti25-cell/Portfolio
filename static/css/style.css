@@ -768,6 +768,28 @@ body {
     line-height: 1.8;
 }
 
+.demo-card {
+    border: 1px solid rgba(0, 242, 255, 0.3);
+    text-align: center;
+}
+
+.demo-card p {
+    margin-bottom: 24px;
+    font-size: 1.05rem;
+}
+
+.btn-demo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+    padding: 14px 32px;
+}
+
+.btn-demo svg {
+    flex-shrink: 0;
+}
+
 .results-list {
     list-style: none;
 }

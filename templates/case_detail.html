@@ -52,8 +52,12 @@
                     <h2><span class="gradient-text">Попробовать в деле</span></h2>
                     <p>{{ case.demo_text }}</p>
                     <a href="{{ case.demo_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-demo">
+                        {% if case.demo_icon == 'telegram' %}
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.198 2.433a2.242 2.242 0 0 0-1.022.215l-16.5 8.25a2.25 2.25 0 0 0 .126 4.073l4.5 1.5 1.5 4.5a2.25 2.25 0 0 0 4.073.126l8.25-16.5a2.25 2.25 0 0 0-1.927-2.164z"/></svg>
-                        Открыть бота в Telegram
+                        {% else %}
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        {% endif %}
+                        {{ case.demo_button|default('Попробовать') }}
                     </a>
                 </div>
                 {% endif %}

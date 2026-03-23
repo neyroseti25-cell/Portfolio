@@ -47,7 +47,9 @@ class Config:
             'color': '#7000FF',
             'icon': 'brain',
             'demo_link': 'https://telegram.me/RAG_based_assist_bot',
-            'demo_text': 'Попробуйте пообщаться с ботом в Telegram — задайте любой вопрос о ретрите и оцените качество ответов!'
+            'demo_text': 'Попробуйте пообщаться с ботом в Telegram — задайте любой вопрос о ретрите и оцените качество ответов!',
+            'demo_button': 'Открыть бота в Telegram',
+            'demo_icon': 'telegram'
         },
         {
             'id': 3,
@@ -135,6 +137,8 @@ class Config:
             'color': '#00F2FF',
             'icon': 'shield',
             'demo_link': 'https://retreat.tatidzufri.com',
-            'demo_text': 'Попробуйте ассистента в деле! Задайте вопрос как клиент — или введите код team2026, чтобы получить доступ к шаблонам для команды.'
+            'demo_text': 'Попробуйте ассистента в деле! Задайте вопрос как клиент — или введите код team2026, чтобы получить доступ к шаблонам для команды.',
+            'demo_button': 'Открыть демо на сайте',
+            'demo_icon': 'globe'
         }
     ]

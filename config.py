@@ -163,7 +163,7 @@ class Config:
             'color': '#7000FF',
             'icon': 'message',
             'demo_link': 'https://t.me/retreat_poznai_bot',
-            'demo_text': 'Вы можете лично протестировать работу AI-ассистента в Telegram-боте @retreat_poznai_bot и увидеть, как мгновенно приходят структурированные заявки в демо-канал куратора.',
+            'demo_text': 'Вы можете лично протестировать работу AI-ассистента в Telegram-боте и увидеть, как мгновенно приходят структурированные заявки в демо-канал куратора.',
             'demo_button': 'Открыть бота в Telegram',
             'demo_icon': 'telegram',
             'demo_link_2': 'https://t.me/+axe67ABBCI0zOGM0',
@@ -188,7 +188,7 @@ class Config:
             'color': '#00F2FF',
             'icon': 'compass',
             'demo_link': 'https://t.me/put_poznay_bot',
-            'demo_text': 'Вы можете лично протестировать работу AI-ассистента в Telegram-боте @put_poznay_bot.',
+            'demo_text': 'Вы можете лично протестировать работу AI-ассистента в Telegram-боте.',
             'demo_button': 'Открыть бота в Telegram',
             'demo_icon': 'telegram'
         },
@@ -210,10 +210,10 @@ class Config:
             'color': '#7000FF',
             'icon': 'star',
             'demo_link': 'https://retreat.tatidzufri.com/#reviews',
-            'demo_text': 'Вы можете ознакомиться с работой системы на сайте https://retreat.tatidzufri.com/#reviews и увидеть уведомления в демо-канале куратора.',
+            'demo_text': 'Вы можете ознакомиться с работой системы на сайте и увидеть уведомления в демо-канале куратора.',
             'demo_button': 'Открыть раздел отзывов',
             'demo_icon': 'globe',
-            'demo_link_2': 'https://t.me/+axe67ABBCI0zOGM0',
+            'demo_link_2': 'https://t.me/+FczuyhqyAxNjMTU8',
             'demo_button_2': 'Открыть демо-канал куратора',
             'demo_icon_2': 'telegram'
         },
@@ -235,7 +235,7 @@ class Config:
             'color': '#00F2FF',
             'icon': 'mic',
             'demo_link': 'https://t.me/curator_audit_bot',
-            'demo_text': 'Вы можете протестировать работу AI-аудитора в Telegram-боте @curator_audit_bot.',
+            'demo_text': 'Вы можете протестировать работу AI-аудитора в Telegram-боте.',
             'demo_button': 'Открыть бота в Telegram',
             'demo_icon': 'telegram'
         }

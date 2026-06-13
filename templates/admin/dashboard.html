@@ -41,7 +41,14 @@
                     </thead>
                     <tbody>
                         {% for msg in messages.items %}
-                        <tr class="{% if not msg.is_read %}unread{% endif %}">
+                        <tr class="msg-row {% if not msg.is_read %}unread{% endif %}"
+                            data-id="{{ msg.id }}"
+                            data-name="{{ msg.name }}"
+                            data-email="{{ msg.email }}"
+                            data-phone="{{ msg.phone or '' }}"
+                            data-subject="{{ msg.subject }}"
+                            data-message="{{ msg.message }}"
+                            data-date="{{ msg.created_at.strftime('%d.%m.%Y %H:%M') }}">
                             <td>{{ msg.id }}</td>
                             <td>
                                 {% if msg.is_read %}
@@ -55,10 +62,13 @@
                             <td>{{ msg.phone or '—' }}</td>
                             <td>{{ msg.subject }}</td>
                             <td>
-                                <div class="msg-preview" title="{{ msg.message }}">{{ msg.message[:80] }}{% if msg.message|length > 80 %}...{% endif %}</div>
+                                <div class="msg-preview" title="Нажмите, чтобы открыть полностью">{{ msg.message[:80] }}{% if msg.message|length > 80 %}...{% endif %}</div>
                             </td>
                             <td>{{ msg.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
                             <td class="actions-cell">
+                                <button type="button" class="btn-action btn-view" title="Открыть сообщение">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
                                 <form method="POST" action="{{ url_for('mark_read', msg_id=msg.id) }}" class="inline-form">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                     <button type="submit" class="btn-action btn-mark" title="{% if msg.is_read %}Отметить как непрочитанное{% else %}Отметить как прочитанное{% endif %}">
@@ -106,4 +116,69 @@
         </div>
     </div>
 </section>
+
+<div class="msg-modal-overlay" id="msg-modal" aria-hidden="true">
+    <div class="msg-modal glass-card" role="dialog" aria-modal="true" aria-labelledby="msg-modal-subject">
+        <button type="button" class="msg-modal-close" id="msg-modal-close" aria-label="Закрыть">&times;</button>
+        <h2 class="msg-modal-subject" id="msg-modal-subject"></h2>
+        <div class="msg-modal-meta">
+            <div class="msg-modal-field"><span class="msg-modal-label">Имя</span><span id="msg-modal-name"></span></div>
+            <div class="msg-modal-field"><span class="msg-modal-label">Email</span><a id="msg-modal-email" href="#"></a></div>
+            <div class="msg-modal-field"><span class="msg-modal-label">Телефон</span><span id="msg-modal-phone"></span></div>
+            <div class="msg-modal-field"><span class="msg-modal-label">Дата</span><span id="msg-modal-date"></span></div>
+        </div>
+        <div class="msg-modal-body">
+            <span class="msg-modal-label">Сообщение</span>
+            <p id="msg-modal-message"></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    var modal = document.getElementById('msg-modal');
+    if (!modal) return;
+    var closeBtn = document.getElementById('msg-modal-close');
+
+    function openModal(row) {
+        document.getElementById('msg-modal-subject').textContent = row.dataset.subject || '(без темы)';
+        document.getElementById('msg-modal-name').textContent = row.dataset.name || '—';
+        document.getElementById('msg-modal-phone').textContent = row.dataset.phone || '—';
+        document.getElementById('msg-modal-date').textContent = row.dataset.date || '—';
+        document.getElementById('msg-modal-message').textContent = row.dataset.message || '';
+        var emailLink = document.getElementById('msg-modal-email');
+        var email = row.dataset.email || '';
+        emailLink.textContent = email || '—';
+        emailLink.href = email ? 'mailto:' + email : '#';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.msg-row').forEach(function (row) {
+        row.addEventListener('click', function (e) {
+            if (e.target.closest('form') || e.target.closest('a') || e.target.closest('.btn-action:not(.btn-view)')) {
+                return;
+            }
+            openModal(row);
+        });
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeModal();
+    });
+})();
+</script>
 {% endblock %}

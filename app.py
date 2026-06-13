@@ -3,6 +3,7 @@ import logging
 from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, url_for, flash, request, abort
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_wtf.csrf import CSRFProtect
 from config import Config
 from models import db, Admin, ContactMessage
 from forms import LoginForm, ContactForm
@@ -24,6 +25,10 @@ app.config.from_object(Config)
 
 db.init_app(app)
 
+# Регистрирует глобальную функцию csrf_token() в шаблонах и включает
+# проверку CSRF для всех POST-запросов (нужно для admin/dashboard.html).
+csrf = CSRFProtect(app)
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'admin_login'
@@ -37,15 +42,25 @@ def load_user(user_id):
 
 
 def init_db():
-    """Create tables and default admin user."""
+    """Create tables and sync the admin user with credentials from .env.
+
+    На каждом старте сверяем username/пароль админа со значениями из .env.
+    Это позволяет менять ADMIN_PASSWORD в .env и подхватывать его
+    простым перезапуском сервиса, без ручных миграций БД.
+    """
     with app.app_context():
         db.create_all()
-        if not Admin.query.filter_by(username=Config.ADMIN_USERNAME).first():
+        admin = Admin.query.filter_by(username=Config.ADMIN_USERNAME).first()
+        if admin is None:
             admin = Admin(username=Config.ADMIN_USERNAME)
             admin.set_password(Config.ADMIN_PASSWORD)
             db.session.add(admin)
             db.session.commit()
             logger.info('Default admin user created: %s', Config.ADMIN_USERNAME)
+        elif not admin.check_password(Config.ADMIN_PASSWORD):
+            admin.set_password(Config.ADMIN_PASSWORD)
+            db.session.commit()
+            logger.info('Admin password synced from .env for: %s', admin.username)
 
 
 # --- Public routes ---

@@ -49,23 +49,23 @@
                             data-subject="{{ msg.subject }}"
                             data-message="{{ msg.message }}"
                             data-date="{{ msg.created_at.strftime('%d.%m.%Y %H:%M') }}">
-                            <td>{{ msg.id }}</td>
-                            <td>
+                            <td data-label="#">{{ msg.id }}</td>
+                            <td data-label="Статус">
                                 {% if msg.is_read %}
                                 <span class="status-badge read">Прочитано</span>
                                 {% else %}
                                 <span class="status-badge unread">Новое</span>
                                 {% endif %}
                             </td>
-                            <td>{{ msg.name }}</td>
-                            <td><a href="mailto:{{ msg.email }}">{{ msg.email }}</a></td>
-                            <td>{{ msg.phone or '—' }}</td>
-                            <td>{{ msg.subject }}</td>
-                            <td>
+                            <td data-label="Имя">{{ msg.name }}</td>
+                            <td data-label="Email"><a href="mailto:{{ msg.email }}">{{ msg.email }}</a></td>
+                            <td data-label="Телефон">{{ msg.phone or '—' }}</td>
+                            <td data-label="Тема">{{ msg.subject }}</td>
+                            <td data-label="Сообщение">
                                 <div class="msg-preview" title="Нажмите, чтобы открыть полностью">{{ msg.message[:80] }}{% if msg.message|length > 80 %}...{% endif %}</div>
                             </td>
-                            <td>{{ msg.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
-                            <td class="actions-cell">
+                            <td data-label="Дата">{{ msg.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                            <td class="actions-cell" data-label="Действия">
                                 <button type="button" class="btn-action btn-view" title="Открыть сообщение">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                                 </button>
@@ -154,14 +154,18 @@
         emailLink.href = email ? 'mailto:' + email : '#';
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
+        document.body.classList.add('modal-open');
     }
 
     function closeModal() {
         modal.classList.remove('open');
         modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
+        document.body.classList.remove('modal-open');
     }
+
+    // Снимаем блокировку прокрутки при возврате из кэша браузера (back/forward),
+    // чтобы страница не оставалась «замороженной».
+    window.addEventListener('pageshow', closeModal);
 
     document.querySelectorAll('.msg-row').forEach(function (row) {
         row.addEventListener('click', function (e) {

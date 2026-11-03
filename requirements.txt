@@ -1,9 +1,13 @@
-Flask>=3.0
-Flask-SQLAlchemy>=3.1
-Flask-Login>=0.6
-Flask-WTF>=1.2
-WTForms>=3.1
-email-validator>=2.1
-Werkzeug>=3.0
-python-dotenv>=1.0
-gunicorn>=22.0
+# Версии зафиксированы по проверенному локальному окружению.
+# Причина: с нижними границами (">=") сборка на сервере ставит самые свежие
+# версии, которые никто не проверял. Именно так в сентябре развалилось
+# оформление генератора контента — Streamlit поднялся с 1.53 до 1.62.
+Flask==3.1.3
+Flask-SQLAlchemy==3.1.1
+Flask-Login==0.6.3
+Flask-WTF==1.2.2
+WTForms==3.2.1
+email-validator==2.3.0
+Werkzeug==3.1.6
+python-dotenv==1.2.2
+gunicorn==25.1.0

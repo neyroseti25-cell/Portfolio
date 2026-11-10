@@ -14,6 +14,8 @@
 <body>
     <canvas id="particles-canvas"></canvas>
 
+    {% set lab_current_path = request.path.rstrip('/') or '/' %}
+    {% set lab_path = lab_current_path if lab_current_path in ['/', '/cases', '/contact'] or lab_current_path.startswith('/case/') else '/' %}
     <nav class="navbar" id="navbar">
         <div class="container nav-container">
             <a href="{{ url_for('index') }}" class="nav-logo">
@@ -27,6 +29,7 @@
                 <li><a href="{{ url_for('index') }}">Главная</a></li>
                 <li><a href="{{ url_for('cases') }}">Кейсы</a></li>
                 <li><a href="{{ url_for('contact') }}">Контакты</a></li>
+                <li><a href="https://lab.tatidzufri.com{{ lab_path }}" target="_blank" rel="noopener">3D-лаборатория ↗</a></li>
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('admin_dashboard') }}">Админ</a></li>
                 <li><a href="{{ url_for('admin_logout') }}">Выход</a></li>

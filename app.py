@@ -1,7 +1,7 @@
 import os
 import logging
 from dotenv import load_dotenv
-from flask import Flask, render_template, redirect, url_for, flash, request, abort
+from flask import Flask, render_template, redirect, url_for, flash, request, abort, Response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
 from config import Config
@@ -39,6 +39,55 @@ login_manager.login_message_category = 'warning'
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(Admin, int(user_id))
+
+
+# --- SEO ---
+
+SITE_URL = 'https://tatidzufri.com'
+
+
+@app.before_request
+def redirect_www():
+    """www.tatidzufri.com → tatidzufri.com (301), чтобы не было дубля сайта."""
+    if request.host.startswith('www.'):
+        qs = request.query_string.decode()
+        return redirect(SITE_URL + request.path + ('?' + qs if qs else ''), code=301)
+
+
+@app.context_processor
+def inject_seo():
+    return {
+        'site_url': SITE_URL,
+        'canonical_url': SITE_URL + request.path,
+        'noindex': request.path.startswith('/admin'),
+    }
+
+
+@app.route('/robots.txt')
+def robots_txt():
+    body = (
+        'User-agent: *\n'
+        'Allow: /\n'
+        'Disallow: /admin\n'
+        '\n'
+        f'Sitemap: {SITE_URL}/sitemap.xml\n'
+    )
+    return Response(body, mimetype='text/plain')
+
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    pages = [('/', '1.0', 'weekly'), ('/cases', '0.9', 'weekly'), ('/contact', '0.6', 'yearly')]
+    pages += [(f"/case/{c['slug']}", '0.8', 'monthly') for c in Config.CASES]
+    urls = '\n'.join(
+        f'  <url>\n    <loc>{SITE_URL}{path}</loc>\n'
+        f'    <changefreq>{freq}</changefreq>\n    <priority>{prio}</priority>\n  </url>'
+        for path, prio, freq in pages
+    )
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+           f'{urls}\n</urlset>\n')
+    return Response(xml, mimetype='application/xml')
 
 
 def init_db():

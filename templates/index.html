@@ -1,7 +1,47 @@
 {% extends 'base.html' %}
 {% from 'macros.html' import case_icon %}
 
-{% block title %}Татьяна — AI-специалист для роста бизнеса{% endblock %}
+{% block title %}Татьяна Дзюбас — AI-инженер: боты, RAG и автоматизация бизнеса{% endblock %}
+
+{% block description %}AI-инженер на фрилансе: Telegram-боты с ИИ, RAG-ассистенты, автоматизация отчётов, отзывов и контента. {{ cases|length }} кейсов с цифрами. Бесплатная консультация.{% endblock %}
+
+{% block structured_data %}
+{% set person_id = site_url ~ '/#person' %}
+{% set ld = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'Person',
+            '@id': person_id,
+            'name': 'Татьяна Дзюбас',
+            'jobTitle': 'AI-инженер',
+            'url': site_url ~ '/',
+            'image': site_url ~ '/static/images/banner.jpg',
+            'email': 'mailto:tatidzufri@gmail.com',
+            'sameAs': ['https://t.me/tatidzufri'],
+            'knowsAbout': ['Большие языковые модели (LLM)', 'RAG', 'Промпт-инжиниринг', 'Telegram-боты',
+                           'Автоматизация бизнес-процессов', 'Python', 'OpenAI API', 'GigaChat', 'YandexGPT']
+        },
+        {
+            '@type': 'WebSite',
+            '@id': site_url ~ '/#website',
+            'url': site_url ~ '/',
+            'name': 'Татьяна Дзюбас — AI-инженер',
+            'inLanguage': 'ru',
+            'publisher': {'@id': person_id}
+        },
+        {
+            '@type': 'Service',
+            'name': 'Разработка AI-решений для бизнеса',
+            'url': site_url ~ '/',
+            'provider': {'@id': person_id},
+            'serviceType': ['Telegram-боты с ИИ', 'RAG-ассистенты по базе знаний', 'Автоматизация отчётов и аналитики',
+                            'AI-управление отзывами', 'Генерация контента в голосе бренда', 'Парсинг и сбор данных']
+        }
+    ]
+} %}
+<script type="application/ld+json">{{ ld|tojson }}</script>
+{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -37,7 +77,10 @@
         </div>
         <div class="hero-visual animate-fade-up" style="animation-delay: 0.2s">
             <div class="banner-frame">
-                <img src="{{ url_for('static', filename='images/banner.png') }}" alt="Татьяна — AI-специалист" class="hero-banner">
+                <img src="{{ url_for('static', filename='images/banner.jpg') }}"
+                     srcset="{{ url_for('static', filename='images/banner-800.jpg') }} 800w, {{ url_for('static', filename='images/banner.jpg') }} 1040w"
+                     sizes="(max-width: 768px) min(90vw, 400px), 520px"
+                     alt="Татьяна Дзюбас — AI-специалист" width="1040" height="693" fetchpriority="high" decoding="async" class="hero-banner">
                 <div class="banner-glow"></div>
             </div>
         </div>

@@ -15,7 +15,7 @@
     --secondary: #7000FF;
     --text: #F8FAFC;
     --text-muted: #94A3B8;
-    --text-dim: #64748B;
+    --text-dim: #7C8BA1;
     --border: rgba(255, 255, 255, 0.08);
     --border-hover: rgba(0, 242, 255, 0.3);
     --radius: 16px;
@@ -982,7 +982,7 @@ textarea.form-control {
     margin-bottom: 12px;
 }
 
-.info-card h3 {
+.info-card h2 {
     font-family: var(--font-heading);
     font-size: 1rem;
     margin-bottom: 8px;
@@ -1443,8 +1443,8 @@ body.modal-open {
     margin-top: 12px;
 }
 
-.footer-links h4,
-.footer-contact h4 {
+.footer-links h3,
+.footer-contact h3 {
     font-family: var(--font-heading);
     font-size: 0.9rem;
     margin-bottom: 16px;

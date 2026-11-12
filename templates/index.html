@@ -82,10 +82,15 @@
         </div>
         <div class="hero-visual animate-fade-up" style="animation-delay: 0.2s">
             <div class="banner-frame">
-                <img src="{{ url_for('static', filename='images/banner.jpg') }}"
-                     srcset="{{ url_for('static', filename='images/banner-800.jpg') }} 800w, {{ url_for('static', filename='images/banner.jpg') }} 1040w"
-                     sizes="(max-width: 768px) min(90vw, 400px), 520px"
-                     alt="Татьяна Дзюбас — AI-специалист" width="1040" height="693" fetchpriority="high" decoding="async" class="hero-banner">
+                <picture>
+                    <source type="image/webp"
+                            srcset="{{ url_for('static', filename='images/banner-800.webp') }} 800w, {{ url_for('static', filename='images/banner.webp') }} 1040w"
+                            sizes="(max-width: 768px) min(90vw, 400px), 520px">
+                    <img src="{{ url_for('static', filename='images/banner.jpg') }}"
+                         srcset="{{ url_for('static', filename='images/banner-800.jpg') }} 800w, {{ url_for('static', filename='images/banner.jpg') }} 1040w"
+                         sizes="(max-width: 768px) min(90vw, 400px), 520px"
+                         alt="Татьяна Дзюбас — AI-специалист" width="1040" height="693" fetchpriority="high" decoding="async" class="hero-banner">
+                </picture>
                 <div class="banner-glow"></div>
             </div>
         </div>

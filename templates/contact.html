@@ -21,7 +21,13 @@
             <div class="contact-form-wrapper animate-on-scroll">
                 <form method="POST" action="{{ url_for('contact') }}" class="contact-form glass-card" novalidate>
                     {{ form.hidden_tag() }}
-                    
+
+                    {# Поле-ловушка для ботов: людям не видно и недоступно с клавиатуры #}
+                    <div class="hp-field" aria-hidden="true">
+                        <label for="website">Не заполняйте это поле</label>
+                        {{ form.website(id="website", tabindex="-1", autocomplete="off") }}
+                    </div>
+
                     <div class="form-group">
                         <label for="name">{{ form.name.label.text }} <span class="required">*</span></label>
                         {{ form.name(class="form-control", placeholder="Ваше имя", id="name") }}

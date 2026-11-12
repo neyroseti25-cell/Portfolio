@@ -402,6 +402,19 @@ body {
     overflow: hidden;
 }
 
+.banner-frame picture {
+    display: block;
+}
+
+/* Поле-ловушка антиспама в форме контактов */
+.hp-field {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 .hero-banner {
     width: 100%;
     height: auto;

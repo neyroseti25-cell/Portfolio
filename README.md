@@ -100,6 +100,31 @@ sudo certbot --nginx -d tatidzufri.com -d www.tatidzufri.com
 bash deploy/update.sh
 ```
 
+### Обычный выкат (с Mac)
+
+```bash
+git push origin main
+ssh server 'bash ~/site/deploy/update.sh'
+```
+
+`update.sh` работает без sudo. Он выполняет `git pull --ff-only`, ставит зависимости, только если изменился `requirements.txt`, и мягко перезагружает gunicorn (HUP, без простоя). Затем проверяет `/`, `/cases`, `/contact`, `/robots.txt` и `/sitemap.xml` через сокет. Если проверка не прошла, скрипт печатает команду отката.
+
+Полный рестарт (`ssh server-root 'systemctl restart portfolio'`) нужен только при обновлении gunicorn или правке юнита.
+
+При изменении `static/css/style.css` поменяйте `v=` в `templates/base.html`. Nginx кэширует `/static` на 30 дней с `immutable`.
+
+## Защита формы контактов от спама
+
+- Скрытое поле-ловушка `website`: боты его заполняют, люди не видят.
+- Подписанная метка времени `form_ts`: отклоняет заявки быстрее 3 секунд после открытия формы и поддельные метки.
+- Спам отбрасывается молча: бот видит «успешно», в базу ничего не пишется. В лог пишется `Contact spam blocked (причина) from IP`.
+
+Посмотреть отсеянное: `ssh server 'journalctl -u portfolio --since "-7 days" | grep "spam blocked"'`.
+
+## Шрифты
+
+Inter и Space Grotesk хранятся локально в `static/fonts/` (SIL OFL 1.1, вариативные, наборы латиница и кириллица). `@font-face` встроен в `base.html`, запросов к Google Fonts нет.
+
 ## Технологии
 
 - Python 3.10+

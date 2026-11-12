@@ -1,9 +1,11 @@
 import os
 import logging
+from datetime import datetime, timezone
 from dotenv import load_dotenv
 from flask import Flask, render_template, redirect, url_for, flash, request, abort, Response
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from flask_wtf.csrf import CSRFProtect
+from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 from config import Config
 from models import db, Admin, ContactMessage
 from forms import LoginForm, ContactForm
@@ -134,23 +136,67 @@ def case_detail(slug):
     return render_template('case_detail.html', case=case, cases=Config.CASES)
 
 
+FORM_MIN_SECONDS = 3            # человек не заполнит форму быстрее
+FORM_MAX_AGE = 24 * 60 * 60     # форма, открытая дольше суток, считается устаревшей
+_form_ts_signer = URLSafeTimedSerializer(Config.SECRET_KEY, salt='contact-form-ts')
+
+
+def _client_ip():
+    return request.headers.get('X-Real-IP') or request.headers.get('X-Forwarded-For') or request.remote_addr
+
+
+def _spam_reason(form):
+    """Вернуть причину, если заявка похожа на бота, иначе None."""
+    if form.website.data:
+        return 'honeypot'
+    try:
+        _, issued = _form_ts_signer.loads(form.form_ts.data or '', max_age=FORM_MAX_AGE, return_timestamp=True)
+    except SignatureExpired:
+        return 'expired'
+    except BadSignature:
+        return 'bad-token'
+    age = (datetime.now(timezone.utc) - issued).total_seconds()
+    if age < FORM_MIN_SECONDS:
+        return f'too-fast ({age:.1f}s)'
+    return None
+
+
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = ContactForm()
+    reason = None
     if form.validate_on_submit():
-        msg = ContactMessage(
-            name=form.name.data,
-            email=form.email.data,
-            phone=form.phone.data or '',
-            subject=form.subject.data,
-            message=form.message.data
-        )
-        db.session.add(msg)
-        db.session.commit()
-        logger.info('New contact message from %s <%s>: %s', msg.name, msg.email, msg.subject)
-        flash('Сообщение отправлено! Я свяжусь с вами в ближайшее время.', 'success')
-        return redirect(url_for('contact'))
+        reason = _spam_reason(form)
+        if reason == 'expired':
+            # Скорее живой человек, долго державший вкладку: не теряем текст, просим отправить ещё раз.
+            flash('Страница была открыта слишком долго. Проверьте сообщение и нажмите «Отправить» ещё раз.', 'warning')
+        elif reason:
+            # Боту отвечаем как обычно, чтобы он не подбирал обход, но ничего не сохраняем.
+            logger.warning('Contact spam blocked (%s) from %s', reason, _client_ip())
+            flash('Сообщение отправлено! Я свяжусь с вами в ближайшее время.', 'success')
+            return redirect(url_for('contact'))
+        else:
+            return _save_contact(form)
+    # Новая метка — при первом открытии и для устаревшей формы. При ошибках валидации
+    # оставляем исходную, иначе быстрое исправление поля сочлось бы ботом (< 3 с).
+    if request.method == 'GET' or reason == 'expired' or not form.form_ts.data:
+        form.form_ts.data = _form_ts_signer.dumps('contact')
     return render_template('contact.html', form=form)
+
+
+def _save_contact(form):
+    msg = ContactMessage(
+        name=form.name.data,
+        email=form.email.data,
+        phone=form.phone.data or '',
+        subject=form.subject.data,
+        message=form.message.data
+    )
+    db.session.add(msg)
+    db.session.commit()
+    logger.info('New contact message from %s <%s>: %s', msg.name, msg.email, msg.subject)
+    flash('Сообщение отправлено! Я свяжусь с вами в ближайшее время.', 'success')
+    return redirect(url_for('contact'))
 
 
 # --- Admin routes ---

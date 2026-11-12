@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SubmitField
+from wtforms import StringField, PasswordField, TextAreaField, SubmitField, HiddenField
 from wtforms.validators import DataRequired, Email, Length, Optional, Regexp
 
 
@@ -36,4 +36,8 @@ class ContactForm(FlaskForm):
         DataRequired(message='Напишите сообщение'),
         Length(min=10, max=5000, message='Сообщение должно быть от 10 до 5000 символов')
     ])
+    # Антиспам. website — поле-ловушка: скрыто от людей CSS-ом, боты его заполняют.
+    # form_ts — подписанное время открытия формы (проверяется в app.contact).
+    website = StringField('Сайт', validators=[Optional(), Length(max=200)])
+    form_ts = HiddenField()
     submit = SubmitField('Отправить')
